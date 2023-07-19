@@ -1,21 +1,20 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import 'dotenv/config';
 import { AppModule } from './app.module';
+import { env } from './config/env';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   app.enableCors({
-    origin: 'https://perciclando-ingressos.vercel.app',
+    origin: '*',
     methods: '*',
     allowedHeaders: '*',
   });
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
-  if (!process.env.PORT) {
-    throw new Error('Port must be specified');
-  }
-
-  await app.listen(process.env.PORT, '0.0.0.0');
+  await app.listen(env.port, '0.0.0.0');
 }
 bootstrap();

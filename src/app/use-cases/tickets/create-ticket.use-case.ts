@@ -5,6 +5,7 @@ import { Ticket } from '../../entities/ticket.entity';
 import { TicketsRepository } from '../../repositories/tickets.repository';
 
 interface CreateTicketUseCaseRequest {
+  userId: string;
   name: string;
   number: number;
 }
@@ -12,7 +13,7 @@ interface CreateTicketUseCaseRequest {
 @Injectable()
 export class CreateTicketUseCase {
   constructor(private ticketsRepository: TicketsRepository) {}
-  async execute({ name, number }: CreateTicketUseCaseRequest) {
+  async execute({ userId, name, number }: CreateTicketUseCaseRequest) {
     const ticketAlreadySold = await this.ticketsRepository.findFirst({
       where: { number },
     });
@@ -29,6 +30,7 @@ export class CreateTicketUseCase {
       id: randomUUID(),
       name,
       number,
+      createdBy: userId,
       createdAt: new Date(),
     };
 
