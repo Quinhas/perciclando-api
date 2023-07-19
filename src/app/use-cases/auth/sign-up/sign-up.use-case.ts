@@ -26,7 +26,7 @@ export class SignUpUseCase {
 
     if (usernameAlreadyInUse) {
       throw new ApplicationException({
-        message: 'Username already in use.',
+        message: 'Nome de usuário já está em uso.',
         statusCode: 400,
         error: 'BAD_REQUEST',
       });

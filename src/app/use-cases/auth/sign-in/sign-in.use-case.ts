@@ -24,7 +24,7 @@ export class SignInUseCase {
 
     if (!user) {
       throw new ApplicationException({
-        message: 'Invalid credentials.',
+        message: 'Credenciais inválidas.',
         statusCode: 400,
         error: 'BAD_REQUEST',
       });
@@ -37,7 +37,7 @@ export class SignInUseCase {
 
     if (!isPasswordValid) {
       throw new ApplicationException({
-        message: 'Invalid credentials.',
+        message: 'Credenciais inválidas.',
         statusCode: 400,
         error: 'BAD_REQUEST',
       });

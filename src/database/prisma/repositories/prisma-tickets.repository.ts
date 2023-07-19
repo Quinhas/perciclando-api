@@ -3,6 +3,7 @@ import { Ticket } from '../../../app/entities/ticket.entity';
 import {
   TicketCreateArgs,
   TicketFindFirstArgs,
+  TicketUpdateArgs,
   TicketsRepository,
 } from '../../../app/repositories/tickets.repository';
 import { PrismaTicketsMapper } from '../mappers/prisma-tickets.mapper';
@@ -28,5 +29,13 @@ export class PrismaTicketsRepository implements TicketsRepository {
     const prismaTicketData = PrismaTicketsMapper.toPrisma(args.data);
 
     await this.prisma.ticket.create({ data: prismaTicketData });
+  }
+
+  async update(args: TicketUpdateArgs): Promise<void> {
+    const { id } = args.where;
+
+    const prismaTicketData = PrismaTicketsMapper.toPrisma(args.data);
+
+    await this.prisma.ticket.update({ where: { id }, data: prismaTicketData });
   }
 }

@@ -8,6 +8,8 @@ export class PrismaTicketsMapper {
       name: ticket.name,
       number: ticket.number,
       createdBy: ticket.createdBy,
+      validatedBy: ticket.validatedBy,
+      validatedAt: ticket.validatedAt,
       createdAt: ticket.createdAt,
       updatedAt: ticket.updatedAt,
     };
@@ -19,6 +21,8 @@ export class PrismaTicketsMapper {
       name: raw.name,
       number: raw.number,
       createdBy: raw.createdBy,
+      validatedBy: raw.validatedBy ?? undefined,
+      validatedAt: raw.validatedAt ?? undefined,
       createdAt: raw.createdAt,
       updatedAt: raw.updatedAt,
     };

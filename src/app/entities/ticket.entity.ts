@@ -3,6 +3,8 @@ export interface Ticket {
   name: string;
   number: number;
   createdBy: string;
+  validatedBy?: string;
   createdAt: Date;
   updatedAt?: Date;
+  validatedAt?: Date;
 }
