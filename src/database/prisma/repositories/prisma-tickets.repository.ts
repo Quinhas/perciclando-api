@@ -3,6 +3,7 @@ import { Ticket } from '../../../app/entities/ticket.entity';
 import {
   TicketCreateArgs,
   TicketFindFirstArgs,
+  TicketFindManyArgs,
   TicketUpdateArgs,
   TicketsRepository,
 } from '../../../app/repositories/tickets.repository';
@@ -12,6 +13,14 @@ import { PrismaService } from '../prisma.service';
 @Injectable()
 export class PrismaTicketsRepository implements TicketsRepository {
   constructor(private readonly prisma: PrismaService) {}
+  async findMany(args: TicketFindManyArgs): Promise<Ticket[]> {
+    const tickets = await this.prisma.ticket.findMany({
+      include: { userValidated: true, user: true },
+    });
+
+    return tickets.map(PrismaTicketsMapper.toDomain);
+  }
+
   async findFirst(args: TicketFindFirstArgs): Promise<Ticket | null> {
     const { id, name, number } = args.where;
     const ticket = await this.prisma.ticket.findFirst({

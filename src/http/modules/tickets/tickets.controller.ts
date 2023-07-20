@@ -8,6 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { CreateTicketUseCase } from '../../../app/use-cases/tickets/create-ticket.use-case';
+import { GetAllTicketsUseCase } from '../../../app/use-cases/tickets/get-all-tickets.use-case';
 import { GetTicketByIdUseCase } from '../../../app/use-cases/tickets/get-ticket-by-id';
 import { ValidateTicketUseCase } from '../../../app/use-cases/tickets/validate-ticket.use-case';
 import { ActiveUserId } from '../../decorators/active-user-id.decorator';
@@ -19,9 +20,17 @@ import { ValidateTicketDto } from './dtos/validate-ticket.dto';
 export class TicketsController {
   constructor(
     private readonly createTicket: CreateTicketUseCase,
+    private readonly getAllTickets: GetAllTicketsUseCase,
     private readonly getTicketById: GetTicketByIdUseCase,
     private readonly validateTicket: ValidateTicketUseCase,
   ) {}
+
+  @Get()
+  async find() {
+    const tickets = await this.getAllTickets.execute();
+
+    return tickets;
+  }
 
   @Get('/:ticketId')
   async findById(@Param() { ticketId }: FindTicketByIdParams) {
@@ -49,7 +58,7 @@ export class TicketsController {
   }
 
   @Post('/validate')
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.NO_CONTENT)
   async validate(
     @ActiveUserId() userId: string,
     @Body() validateTicketDto: ValidateTicketDto,

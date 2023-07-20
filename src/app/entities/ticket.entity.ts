@@ -1,3 +1,5 @@
+import { User } from './user.entity';
+
 export interface Ticket {
   id: string;
   name: string;
@@ -7,4 +9,6 @@ export interface Ticket {
   createdAt: Date;
   updatedAt?: Date;
   validatedAt?: Date;
+  userValidated?: User;
+  createdByUser?: User;
 }
