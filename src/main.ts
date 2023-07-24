@@ -8,7 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: 'https://perciclando.vercel.app',
+    origin: '*',
     methods: '*',
     allowedHeaders: '*',
   });

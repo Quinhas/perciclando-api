@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from '../../../app/entities/user.entity';
 import {
   UserCreateArgs,
+  UserFindManyArgs,
   UserFindUniqueArgs,
   UsersRepository,
 } from '../../../app/repositories/users.repository';
@@ -11,6 +12,12 @@ import { PrismaService } from '../prisma.service';
 @Injectable()
 export class PrismaUsersRepository implements UsersRepository {
   constructor(private readonly prisma: PrismaService) {}
+
+  async findMany(args: UserFindManyArgs): Promise<User[]> {
+    const users = await this.prisma.user.findMany();
+
+    return users.map(PrismaUserMapper.toDomain);
+  }
 
   async findUnique(args: UserFindUniqueArgs): Promise<User | null> {
     const { id, username } = args.where;
