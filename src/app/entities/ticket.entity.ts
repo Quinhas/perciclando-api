@@ -4,11 +4,11 @@ export interface Ticket {
   id: string;
   name: string;
   number: number;
-  createdBy: string;
-  validatedBy?: string;
+  createdById: string;
+  validatedById?: string;
   createdAt: Date;
   updatedAt?: Date;
   validatedAt?: Date;
-  userValidated?: User;
-  createdByUser?: User;
+  validatedBy?: User;
+  createdBy?: User;
 }

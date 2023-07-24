@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Ticket } from '../../../app/entities/ticket.entity';
 import {
   TicketCreateArgs,
+  TicketDeleteArgs,
   TicketFindFirstArgs,
   TicketFindManyArgs,
   TicketUpdateArgs,
@@ -46,5 +47,11 @@ export class PrismaTicketsRepository implements TicketsRepository {
     const prismaTicketData = PrismaTicketsMapper.toPrisma(args.data);
 
     await this.prisma.ticket.update({ where: { id }, data: prismaTicketData });
+  }
+
+  async delete(args: TicketDeleteArgs): Promise<void> {
+    const { id } = args.where;
+
+    await this.prisma.ticket.delete({ where: { id } });
   }
 }

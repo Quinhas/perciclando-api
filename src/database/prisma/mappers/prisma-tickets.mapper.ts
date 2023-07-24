@@ -13,8 +13,8 @@ export class PrismaTicketsMapper {
       id: ticket.id,
       name: ticket.name,
       number: ticket.number,
-      createdBy: ticket.createdBy,
-      validatedBy: ticket.validatedBy,
+      createdById: ticket.createdById,
+      validatedById: ticket.validatedById,
       validatedAt: ticket.validatedAt,
       createdAt: ticket.createdAt,
       updatedAt: ticket.updatedAt,
@@ -26,14 +26,14 @@ export class PrismaTicketsMapper {
       id: raw.id,
       name: raw.name,
       number: raw.number,
-      createdBy: raw.createdBy,
-      validatedBy: raw.validatedBy ?? undefined,
+      createdById: raw.createdBy,
+      validatedById: raw.validatedBy ?? undefined,
       validatedAt: raw.validatedAt ?? undefined,
       createdAt: raw.createdAt,
       updatedAt: raw.updatedAt,
-      userValidated:
+      validatedBy:
         raw.userValidated && PrismaUserMapper.toDomain(raw.userValidated),
-      createdByUser: raw.user && PrismaUserMapper.toDomain(raw.user),
+      createdBy: raw.user && PrismaUserMapper.toDomain(raw.user),
     };
   }
 }

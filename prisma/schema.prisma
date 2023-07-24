@@ -8,18 +8,20 @@ datasource db {
 }
 
 model Ticket {
-  id          String  @db.Uuid()
-  name        String  @db.VarChar(255)
-  number      Int     @db.Integer()
-  createdBy   String  @db.Uuid()
-  validatedBy String? @db.Uuid()
+  id     String @db.Uuid()
+  name   String @db.VarChar(255)
+  number Int    @db.Integer()
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  validatedAt DateTime? @db.Timestamp()
+  createdById String @db.Uuid()
 
-  user          User  @relation(name: "fk_tickets_createdBy", fields: [createdBy], references: [id])
-  userValidated User? @relation(name: "fk_tickets_validatedBy", fields: [validatedBy], references: [id])
+  validatedAt   DateTime? @db.Timestamp()
+  validatedById String?   @db.Uuid()
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user          User  @relation(name: "fk_tickets_createdById", fields: [createdById], references: [id])
+  userValidated User? @relation(name: "fk_tickets_validatedById", fields: [validatedById], references: [id])
 
   @@id([id], map: "pk_tickets")
   @@map("tickets")
@@ -33,8 +35,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  createdTickets   Ticket[] @relation(name: "fk_tickets_createdBy")
-  validatedTickets Ticket[] @relation(name: "fk_tickets_validatedBy")
+  createdTickets   Ticket[] @relation(name: "fk_tickets_createdById")
+  validatedTickets Ticket[] @relation(name: "fk_tickets_validatedById")
 
   @@id([id], map: "pk_users")
   @@map("users")

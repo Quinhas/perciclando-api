@@ -30,7 +30,7 @@ export class CreateTicketUseCase {
       id: randomUUID(),
       name,
       number,
-      createdBy: userId,
+      createdById: userId,
       createdAt: new Date(),
     };
 

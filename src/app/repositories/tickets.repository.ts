@@ -21,9 +21,14 @@ export interface TicketUpdateArgs {
   data: Ticket;
 }
 
+export interface TicketDeleteArgs {
+  where: Partial<Ticket>;
+}
+
 export abstract class TicketsRepository {
   abstract findFirst(args: TicketFindFirstArgs): Promise<Ticket | null>;
   abstract findMany(args: TicketFindManyArgs): Promise<Ticket[]>;
   abstract create(args: TicketCreateArgs): Promise<void>;
   abstract update(args: TicketUpdateArgs): Promise<void>;
+  abstract delete(args: TicketDeleteArgs): Promise<void>;
 }

@@ -2,43 +2,44 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { ApplicationException } from '../../../domain/exceptions/application-exception';
 import { TicketsRepository } from '../../repositories/tickets.repository';
 
-interface ValidateTicketUseCaseRequest {
+interface DeleteTicketUseCaseRequest {
   userId: string;
-  ticketId: string;
+  id: string;
 }
 
 @Injectable()
-export class ValidateTicketUseCase {
+export class DeleteTicketUseCase {
   constructor(private ticketsRepository: TicketsRepository) {}
-
-  async execute({ userId, ticketId }: ValidateTicketUseCaseRequest) {
+  async execute({ id, userId }: DeleteTicketUseCaseRequest) {
     const ticket = await this.ticketsRepository.findFirst({
-      where: { id: ticketId },
+      where: { id },
     });
 
     if (!ticket) {
       throw new ApplicationException({
         statusCode: HttpStatus.NOT_FOUND,
-        message: 'Ingresso não encontrado.',
         error: 'NOT_FOUND',
+        message: 'Ingresso não encontrado.',
+      });
+    }
+
+    if (ticket.createdById !== userId) {
+      throw new ApplicationException({
+        statusCode: HttpStatus.FORBIDDEN,
+        error: 'FORBIDDEN',
+        message: 'Ingresso criado por outro usuário.',
       });
     }
 
     if (ticket.validatedAt) {
       throw new ApplicationException({
         statusCode: HttpStatus.FORBIDDEN,
-        message: 'Ingresso já validado.',
         error: 'FORBIDDEN',
+        message: 'Ingresso com status VALIDADO.',
       });
     }
 
-    ticket.validatedAt = new Date();
-    ticket.validatedById = userId;
-
-    await this.ticketsRepository.update({
-      where: { id: ticketId },
-      data: ticket,
-    });
+    await this.ticketsRepository.delete({ where: { id } });
 
     return ticket;
   }

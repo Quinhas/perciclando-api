@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -8,6 +9,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { CreateTicketUseCase } from '../../../app/use-cases/tickets/create-ticket.use-case';
+import { DeleteTicketUseCase } from '../../../app/use-cases/tickets/delete-ticket.use-case';
 import { GetAllTicketsUseCase } from '../../../app/use-cases/tickets/get-all-tickets.use-case';
 import { GetTicketByIdUseCase } from '../../../app/use-cases/tickets/get-ticket-by-id';
 import { ValidateTicketUseCase } from '../../../app/use-cases/tickets/validate-ticket.use-case';
@@ -23,6 +25,7 @@ export class TicketsController {
     private readonly getAllTickets: GetAllTicketsUseCase,
     private readonly getTicketById: GetTicketByIdUseCase,
     private readonly validateTicket: ValidateTicketUseCase,
+    private readonly deleteTicket: DeleteTicketUseCase,
   ) {}
 
   @Get()
@@ -66,5 +69,14 @@ export class TicketsController {
     const { id } = validateTicketDto;
 
     await this.validateTicket.execute({ ticketId: id, userId });
+  }
+
+  @Delete('/:ticketId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(
+    @ActiveUserId() userId: string,
+    @Param() { ticketId }: FindTicketByIdParams,
+  ) {
+    await this.deleteTicket.execute({ id: ticketId, userId });
   }
 }
