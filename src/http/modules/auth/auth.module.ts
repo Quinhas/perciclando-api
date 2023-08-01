@@ -5,6 +5,7 @@ import { PasswordService } from '../../../app/services/password/password.service
 import { TokenService } from '../../../app/services/token/token.service';
 import { SignInUseCase } from '../../../app/use-cases/auth/sign-in/sign-in.use-case';
 import { SignUpUseCase } from '../../../app/use-cases/auth/sign-up/sign-up.use-case';
+import { CreateUserUseCase } from '../../../app/use-cases/users/create-user.use-case';
 import { DatabaseModule } from '../../../database/database.module';
 import { AuthController } from './auth.controller';
 
@@ -14,6 +15,7 @@ import { AuthController } from './auth.controller';
   providers: [
     SignInUseCase,
     SignUpUseCase,
+    CreateUserUseCase,
     { provide: PasswordService, useClass: BcryptPasswordServiceAdapter },
     { provide: TokenService, useClass: JwtTokenServiceAdapter },
   ],

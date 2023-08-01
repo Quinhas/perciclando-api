@@ -21,7 +21,7 @@ export class AuthController {
       password,
     });
     return {
-      access_token: accessToken,
+      accessToken: accessToken,
     };
   }
 
@@ -33,7 +33,7 @@ export class AuthController {
       password,
     });
     return {
-      access_token: accessToken,
+      accessToken: accessToken,
     };
   }
 }
