@@ -1,6 +1,6 @@
-import { User } from './user.entity';
+import { IMember } from './member.entity';
 
-export interface Ticket {
+export interface ITicket {
   id: string;
   name: string;
   number: number;
@@ -9,6 +9,6 @@ export interface Ticket {
   createdAt: Date;
   updatedAt?: Date;
   validatedAt?: Date;
-  validatedBy?: User;
-  createdBy?: User;
+  validatedBy?: IMember;
+  createdBy?: IMember;
 }

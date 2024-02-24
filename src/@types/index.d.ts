@@ -1,17 +1,18 @@
-import type { HttpStatus } from '@nestjs/common';
+import { IHttpStatus } from '../app/enums/http-status.enum';
 
 declare global {
   declare namespace Perciclando {
-    declare interface ApplicationException {
+    declare interface IApplicationException {
       message: string;
-      statusCode: HttpStatus;
-      error: string;
+      statusCode?: IHttpStatus;
+      error?: Record<string, unknown>;
     }
   }
 
   declare namespace Express {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface Request {
-      user?: {
+      musician?: {
         id: string;
       };
     }

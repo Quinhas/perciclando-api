@@ -1,34 +1,38 @@
-import { Ticket } from '../entities/ticket.entity';
+import { ITicket } from '@app/entities/ticket.entity';
 
-interface PKTicket {
+type PKTicket = {
   id: string;
+};
+
+export interface ITicketFindFirstArgs {
+  where: Partial<ITicket>;
 }
 
-export interface TicketFindFirstArgs {
-  where: Partial<Ticket>;
+export interface ITicketFindManyArgs {
+  where?: Partial<ITicket>;
 }
 
-export interface TicketFindManyArgs {
-  where?: Partial<Ticket>;
+export interface ITicketCreateArgs {
+  data: ITicket;
 }
 
-export interface TicketCreateArgs {
-  data: Ticket;
-}
-
-export interface TicketUpdateArgs {
+export interface ITicketUpdateArgs {
   where: PKTicket;
-  data: Ticket;
+  data: ITicket;
 }
 
-export interface TicketDeleteArgs {
-  where: Partial<Ticket>;
+export interface ITicketDeleteArgs {
+  where: Partial<ITicket>;
 }
 
-export abstract class TicketsRepository {
-  abstract findFirst(args: TicketFindFirstArgs): Promise<Ticket | null>;
-  abstract findMany(args: TicketFindManyArgs): Promise<Ticket[]>;
-  abstract create(args: TicketCreateArgs): Promise<void>;
-  abstract update(args: TicketUpdateArgs): Promise<void>;
-  abstract delete(args: TicketDeleteArgs): Promise<void>;
+export interface ITicketsRepository {
+  findFirst(args: ITicketFindFirstArgs): Promise<ITicket | null>;
+
+  findMany(args: ITicketFindManyArgs): Promise<ITicket[]>;
+
+  create(args: ITicketCreateArgs): Promise<void>;
+
+  update(args: ITicketUpdateArgs): Promise<void>;
+
+  delete(args: ITicketDeleteArgs): Promise<void>;
 }

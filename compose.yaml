@@ -1,0 +1,49 @@
+services:
+  perciclando_server:
+    container_name: perciclando_server
+    build:
+      context: .
+      target: dev
+    volumes:
+      - .:/usr/src/app
+      - ./node_modules:/usr/src/app/node_modules
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    ports:
+      - 3003:3003
+    depends_on:
+      perciclando_db:
+        condition: service_healthy
+    networks:
+      - perciclando-network
+
+  perciclando_db:
+    container_name: perciclando_db
+    image: postgres
+    restart: always
+    volumes:
+      - db-perciclando:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - ${DB_PORT}:5432
+    expose:
+      - ${DB_PORT}
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - perciclando-network
+
+volumes:
+  db-perciclando:
+
+networks:
+  perciclando-network:
+    name: perciclando-network

@@ -1,23 +1,27 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
-import { ApplicationException } from '../../../domain/exceptions/application-exception';
-import { TicketsRepository } from '../../repositories/tickets.repository';
+import { Inject, Injectable } from '@nestjs/common';
 
-interface GetTicketByIdUseCaseRequest {
+import { IHttpStatus } from '../../enums/http-status.enum';
+import { ApplicationException } from '../../exceptions/application-exception';
+import { ITicketsRepository } from '../../repositories/tickets.repository';
+
+interface IGetTicketByIdUseCaseRequest {
   id: string;
 }
 
 @Injectable()
 export class GetTicketByIdUseCase {
-  constructor(private ticketsRepository: TicketsRepository) {}
-  async execute({ id }: GetTicketByIdUseCaseRequest) {
+  constructor(
+    @Inject('TicketsRepository') private ticketsRepository: ITicketsRepository,
+  ) {}
+
+  async execute({ id }: IGetTicketByIdUseCaseRequest) {
     const ticket = await this.ticketsRepository.findFirst({
       where: { id },
     });
 
     if (!ticket) {
       throw new ApplicationException({
-        statusCode: HttpStatus.NOT_FOUND,
-        error: 'NOT_FOUND',
+        statusCode: IHttpStatus.NOT_FOUND,
         message: 'Ingresso não encontrado.',
       });
     }

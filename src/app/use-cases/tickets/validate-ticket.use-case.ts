@@ -1,39 +1,42 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
-import { ApplicationException } from '../../../domain/exceptions/application-exception';
-import { TicketsRepository } from '../../repositories/tickets.repository';
+import { Inject, Injectable } from '@nestjs/common';
 
-interface ValidateTicketUseCaseRequest {
-  userId: string;
+import { IHttpStatus } from '../../enums/http-status.enum';
+import { ApplicationException } from '../../exceptions/application-exception';
+import { ITicketsRepository } from '../../repositories/tickets.repository';
+
+interface IValidateTicketUseCaseRequest {
+  memberId: string;
   ticketId: string;
 }
 
 @Injectable()
 export class ValidateTicketUseCase {
-  constructor(private ticketsRepository: TicketsRepository) {}
+  constructor(
+    @Inject('TicketsRepository')
+    private ticketsRepository: ITicketsRepository,
+  ) {}
 
-  async execute({ userId, ticketId }: ValidateTicketUseCaseRequest) {
+  async execute({ memberId, ticketId }: IValidateTicketUseCaseRequest) {
     const ticket = await this.ticketsRepository.findFirst({
       where: { id: ticketId },
     });
 
     if (!ticket) {
       throw new ApplicationException({
-        statusCode: HttpStatus.NOT_FOUND,
+        statusCode: IHttpStatus.NOT_FOUND,
         message: 'Ingresso não encontrado.',
-        error: 'NOT_FOUND',
       });
     }
 
     if (ticket.validatedAt) {
       throw new ApplicationException({
-        statusCode: HttpStatus.FORBIDDEN,
+        statusCode: IHttpStatus.FORBIDDEN,
         message: 'Ingresso já validado.',
-        error: 'FORBIDDEN',
       });
     }
 
     ticket.validatedAt = new Date();
-    ticket.validatedById = userId;
+    ticket.validatedById = memberId;
 
     await this.ticketsRepository.update({
       where: { id: ticketId },

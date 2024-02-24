@@ -1,0 +1,17 @@
+{
+  "files.associations": {
+    ".prettierrc": "json",
+    ".env.*": "dotenv"
+  },
+  "material-icon-theme.activeIconPack": "nest",
+  "material-icon-theme.folders.associations": {
+    "http": "api",
+    "infra": "components",
+    "mappers": "mappings",
+    "exceptions": "error",
+    "use-cases": "components",
+    "entities": "class",
+    "repositories": "database"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
+}

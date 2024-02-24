@@ -9,5 +9,6 @@
   "endOfLine": "lf",
   "singleQuote": true,
   "printWidth": 80,
-  "semi": true
+  "semi": true,
+  "experimentalTernaries": true
 }

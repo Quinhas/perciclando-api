@@ -1,9 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { TicketsRepository } from '../../repositories/tickets.repository';
+import { Inject, Injectable } from '@nestjs/common';
+
+import { ITicketsRepository } from '../../repositories/tickets.repository';
 
 @Injectable()
 export class GetAllTicketsUseCase {
-  constructor(private ticketsRepository: TicketsRepository) {}
+  constructor(
+    @Inject('TicketsRepository') private ticketsRepository: ITicketsRepository,
+  ) {}
 
   async execute() {
     const tickets = await this.ticketsRepository.findMany({});

@@ -1,8 +1,9 @@
-import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import 'dotenv/config';
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { env } from '@infra/config/env';
+
 import { AppModule } from './app.module';
-import { env } from './config/env';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,8 +14,11 @@ async function bootstrap() {
     allowedHeaders: '*',
   });
 
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  await app.listen(env.PORT, '0.0.0.0');
 
-  await app.listen(env.port, '0.0.0.0');
+  const url = await app.getUrl();
+
+  // eslint-disable-next-line no-console
+  console.log(`[Api] Application is running on ${url}`);
 }
 bootstrap();

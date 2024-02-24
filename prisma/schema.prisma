@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -12,32 +13,59 @@ model Ticket {
   name   String @db.VarChar(255)
   number Int    @db.Integer()
 
-  createdById String @db.Uuid()
+  createdById String @map("created_by") @db.Uuid()
 
-  validatedAt   DateTime? @db.Timestamp()
-  validatedById String?   @db.Uuid()
+  validatedAt   DateTime? @map("validated_at") @db.Timestamp()
+  validatedById String?   @map("validated_by") @db.Uuid()
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  user          User  @relation(name: "fk_tickets_createdById", fields: [createdById], references: [id])
-  userValidated User? @relation(name: "fk_tickets_validatedById", fields: [validatedById], references: [id])
+  musician          Member  @relation(name: "fk_tickets_createdById", fields: [createdById], references: [id])
+  musicianValidated Member? @relation(name: "fk_tickets_validatedById", fields: [validatedById], references: [id])
 
   @@id([id], map: "pk_tickets")
   @@map("tickets")
 }
 
-model User {
-  id       String @db.Uuid()
-  username String @unique @db.VarChar(50)
-  password String @db.VarChar
+enum MemberRole {
+  MUSICIAN
+  MODERATOR
+  ADMIN
+}
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Member {
+  id         String       @db.Uuid()
+  username   String       @unique @db.VarChar(50)
+  name       String       @db.VarChar(150)
+  email      String       @unique @db.VarChar(150)
+  password   String       @db.VarChar
+  photoUrl   String?      @map("photo_url") @db.Text
+  roles      MemberRole[]
+  isDisabled Boolean      @default(false) @map("is_disabled") @db.Boolean
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   createdTickets   Ticket[] @relation(name: "fk_tickets_createdById")
   validatedTickets Ticket[] @relation(name: "fk_tickets_validatedById")
 
-  @@id([id], map: "pk_users")
-  @@map("users")
+  @@id([id], map: "pk_members")
+  @@map("members")
+}
+
+model Event {
+  id           String    @db.Uuid()
+  name         String    @unique @db.VarChar(150)
+  description  String?   @db.Text
+  date         DateTime? @db.Timestamp()
+  thumbnailUrl String?   @map("thumbnail_url") @db.Text
+
+  isPublished Boolean @default(false) @map("is_published") @db.Boolean
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  @@id([id], map: "pk_events")
+  @@map("events")
 }
